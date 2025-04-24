@@ -20,10 +20,22 @@
         <h1>Welcome to my Express App</h1>
         <p>Using links to explore express end points.</p>
 
+        <!-- Product Section -->
         <button id="fetchProducts">Fetch All Products</button>
         <button id="fetchCheapProducts">Fetch Products Under $200</button>
 
         <div id="productsContainer"></div>
+
+        <!-- People Section -->
+        <h2>People API</h2>
+        <button id="fetchPeople">Fetch People</button>
+        <div id="peopleContainer"></div>
+    
+        <h3>Add Person</h3>
+        <form id="addPersonForm">
+            <input type="text" name="name" placeholder="Enter Name" required>
+            <button type="submit">Add Person</button>
+        </form>
     </div>
     <script src="index.js"></script>
 </body>
