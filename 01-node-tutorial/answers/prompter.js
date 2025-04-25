@@ -66,6 +66,12 @@ const server = http.createServer((req, res) => {
   }
 });
 
+//Task 3
+server.on("request", (req) => {
+  console.log("event received: ", req.tethod, req.url);
+});
+
+
 // Start the server
 server.listen(3000, () => {
   console.log("Server is running on http://localhost:3000");
