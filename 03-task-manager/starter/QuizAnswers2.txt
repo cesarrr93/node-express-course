@@ -1,0 +1,17 @@
+the asyncWrapper function will take care of the error that meet the criteria intead of typing the wrong data.
+
+for example serve is expecting 10 characters and you sent 10 caracters but nothing match on the data base
+you will have the error of no task with such id and whatever id you input, also the 404 code will be send
+as well. 
+
+if you send a 9 character id you will be getting a different error which is specified in the CustomAPIError
+because it doesnt follow the criteria specified.
+
+const getTask = asyncWrapper(async (req, res, next) => {  
+  const { id: taskID } = req.params;  
+  const task = await Task.findOne({ _id: taskID });  
+  if (!task) {  
+    return next(CustomAPIError(`No task with such id : ${taskID}', 404))
+  }  
+  res.status(200).json({ task });  
+});  
