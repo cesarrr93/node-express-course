@@ -1,93 +1,28 @@
 const express = require("express");
-const { products } = require("./data");
 const app = express();
 
-//Middleware
-app.use(express.static("./public")); //Serve static file (HTML,CSS,etc.)
+const people = require("./routes/people");
+const auth = require("./routes/auth");
 
-// API Routes
-app.get("/api/v1/test", (req, res) => {
-  res.json({
-    message: "This is a test API endpoint",
-    status: "success",
-    data: {
-      version: "1.0",
-      features: ["static", "api", "404"],
-    },
-  });
-});
+// logger middleware function
+const logger = (req, res, next) => {
+  const time = new Date().toISOString();
+  console.log(`[${time}] ${req.method} ${req.url}`);
+  next();
+};
 
-// get all products
-app.get("/api/v1/products", (req, res) => {
-  res.json({ products });
-});
+//Using logger for all routes
+app.use(logger);
 
-// Get single product by ID
-app.get("/api/v1/products/:productID", (req, res) => {
-  const idToFind = parseInt(req.params.productID);
+//Serve static file (HTML,CSS,etc.)
+app.use(express.static("./methods-public"));
 
-  // Check if the ID is a valid number
-  if (isNaN(idToFind)) {
-    return res.status(400).json({
-      message: "Product ID must be a number",
-    });
-  }
+//Body parsing middleware
+app.use(express.urlencoded({ extended: false }));
+app.use(express.json());
 
-  const product = products.find((p) => p.id === idToFind);
-
-  if (!product) {
-    return res.status(404).json({
-      message: "That product was not found.",
-    });
-  }
-
-  res.json({ product });
-});
-
-//Product query endpoint
-app.get("/api/v1/query", (req, res) => {
-  const { search, limit, maxPrice } = req.query; //req variables
-  let filteredProducts = [...products]; //deconstructing array
-
-  // Search by name
-  if (search) {
-    filteredProducts = filteredProducts.filter((product) =>
-      product.name.toLocaleLowerCase().includes(search.toLocaleLowerCase())
-    );
-  }
-
-  //Filter by maximum price
-  if (maxPrice) {
-    const maxPriceNum = parseFloat(maxPrice);
-    if (!isNaN(maxPriceNum)) {
-      filteredProducts = filteredProducts.filter(
-        (product) => product.price <= maxPriceNum
-      );
-    }
-  }
-
-  //Limit results
-  if (limit) {
-    const limitNum = parseInt(limit);
-    if (!isNaN(limitNum)) {
-      filteredProducts = filteredProducts.slice(0, limitNum);
-    }
-  }
-
-  if (filteredProducts.length === 0) {
-    return res.status(200).json({
-      message: "No products match your search criteria",
-      products: [],
-    });
-  }
-
-  res.json({ products: filteredProducts });
-});
-
-// 404 handler
-app.all("*", (req, res) => {
-  res.status(404).send("Page not found");
-});
+app.use("/api/people", people);
+app.use("/login", auth);
 
 // Start Server
 app.listen(3000, () => {
