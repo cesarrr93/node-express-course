@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Week3</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <nav>
+        <a href="/">Home</a>
+        <a href="/api/v1/products">Products API</a>
+        <a href="/api/v1/products/1">Product 1</a>
+        <a href="/api/v1/products/7">Product 7</a>
+        <a href="/api/v1/test">Test API</a>
+        <a href="/api/v1/query?search=table&limit=2">Query Example</a>
+    </nav>
+
+    <div class="content">
+        <h1>Welcome to my Express App</h1>
+        <p>Using links to explore express end points.</p>
+
+        <button id="fetchProducts">Fetch All Products</button>
+        <button id="fetchCheapProducts">Fetch Products Under $200</button>
+
+        <div id="productsContainer"></div>
+    </div>
+    <script src="index.js"></script>
+</body>
+</html>
